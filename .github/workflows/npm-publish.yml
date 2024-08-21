@@ -3,19 +3,22 @@ name: Publish to npm
 on:
   push:
     tags:
-      - 'v*.*.*'  # 仅当推送符合版本号模式的标签时触发
-  workflow_dispatch:  # 允许手动触发
+      - 'v*.*.*'
+  workflow_dispatch:
 
 jobs:
   publish:
     runs-on: ubuntu-latest
 
+    permissions:
+      contents: write  # 显式赋予对内容的写权限
+
     steps:
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3  # 使用更新后的v3版本
 
       - name: Setup Node.js
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4  # 使用更新后的v4版本
         with:
           node-version: '18'
           registry-url: https://registry.npmjs.org/
@@ -24,12 +27,12 @@ jobs:
         run: npm install
 
       - name: Publish to npm
-        run: npm publish --access public  # 确保包是公开发布的
+        run: npm publish --access public
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub release
-        uses: actions/create-release@v1
+        uses: actions/create-release@v3  # 使用更新后的v3版本
         with:
           tag_name: ${{ github.ref_name }}
           release_name: Release ${{ github.ref_name }}
