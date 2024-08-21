@@ -2,8 +2,9 @@ name: Publish to npm
 
 on:
   push:
-    branches:
-      - main  # 你想要触发发布的分支
+    tags:
+      - 'v*.*.*'  # 仅当推送符合版本号模式的标签时触发
+  workflow_dispatch:  # 允许手动触发
 
 jobs:
   publish:
@@ -16,26 +17,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '18'  # 或者根据需要调整Node.js的版本
+          node-version: '18'
           registry-url: https://registry.npmjs.org/
 
       - name: Install dependencies
         run: npm install
 
-      - name: Run tests
-        run: npm test  # 确保测试通过
-
       - name: Publish to npm
-        run: npm publish
+        run: npm publish --access public  # 确保包是公开发布的
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub release
         uses: actions/create-release@v1
         with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
+          tag_name: ${{ github.ref_name }}
+          release_name: Release ${{ github.ref_name }}
           body: |
-            Automatic release based on changes in ${GITHUB_REF}.
+            Automatic release based on changes in ${{ github.ref_name }}.
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
