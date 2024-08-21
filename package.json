@@ -1,6 +1,6 @@
 {
   "name": "json-secure-crypt",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple Node.js tool to encrypt and decrypt JSON files",
   "main": "src/encrypt-json.js",
   "scripts": {
