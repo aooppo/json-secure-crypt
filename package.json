@@ -7,6 +7,10 @@
     "encrypt": "node src/encrypt-json.js",
     "decrypt": "node src/decrypt-json.js"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aooppo/json-secure-crypt.git"
+  },
   "bin": {
     "encrypt-json": "./src/encrypt-json.js",
     "decrypt-json": "./src/decrypt-json.js"
