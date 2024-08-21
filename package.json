@@ -1,0 +1,21 @@
+{
+  "name": "json-secure-crypt",
+  "version": "1.0.0",
+  "description": "A simple Node.js tool to encrypt and decrypt JSON files",
+  "main": "src/encrypt-json.js",
+  "scripts": {
+    "encrypt": "node src/encrypt-json.js",
+    "decrypt": "node src/decrypt-json.js"
+  },
+  "bin": {
+    "encrypt-json": "./src/encrypt-json.js",
+    "decrypt-json": "./src/decrypt-json.js"
+  },
+  "author": "tj",
+  "license": "MIT",
+  "dependencies": {
+    "axios": "^1.7.4",
+    "crypto-js": "^4.2.0",
+    "https-proxy-agent": "^7.0.5"
+  }
+}
