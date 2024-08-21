@@ -11,14 +11,14 @@ jobs:
     runs-on: ubuntu-latest
 
     permissions:
-      contents: write  # 显式赋予对内容的写权限
+      contents: write
 
     steps:
       - name: Checkout code
-        uses: actions/checkout@v3  # 使用更新后的v3版本
+        uses: actions/checkout@v3
 
       - name: Setup Node.js
-        uses: actions/setup-node@v4  # 使用更新后的v4版本
+        uses: actions/setup-node@v4
         with:
           node-version: '18'
           registry-url: https://registry.npmjs.org/
@@ -28,7 +28,9 @@ jobs:
 
       - name: Get package version
         id: get_version
-        run: echo "PACKAGE_VERSION=$(node -p \"require('./package.json').version\")" >> $GITHUB_ENV
+        run: |
+          PACKAGE_VERSION=$(node -p "require('./package.json').version")
+          echo "PACKAGE_VERSION=$PACKAGE_VERSION" >> $GITHUB_ENV
 
       - name: Publish to npm
         run: npm publish --access public
@@ -36,7 +38,7 @@ jobs:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
 
       - name: Create GitHub release
-        uses: actions/create-release@v1  # 正确使用v1版本
+        uses: actions/create-release@v1
         with:
           tag_name: "v${{ env.PACKAGE_VERSION }}"
           release_name: "Release v${{ env.PACKAGE_VERSION }}"
