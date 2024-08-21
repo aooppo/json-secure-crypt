@@ -1,0 +1,41 @@
+name: Publish to npm
+
+on:
+  push:
+    branches:
+      - main  # 你想要触发发布的分支
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'  # 或者根据需要调整Node.js的版本
+          registry-url: https://registry.npmjs.org/
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Run tests
+        run: npm test  # 确保测试通过
+
+      - name: Publish to npm
+        run: npm publish
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+
+      - name: Create GitHub release
+        uses: actions/create-release@v1
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            Automatic release based on changes in ${GITHUB_REF}.
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
